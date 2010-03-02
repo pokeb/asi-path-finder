@@ -16,10 +16,10 @@
 		B52D4E25113A90F000AA68CD /* ASISpaceTimePathFinder.m in Sources */ = {isa = PBXBuildFile; fileRef = B52D4E22113A90F000AA68CD /* ASISpaceTimePathFinder.m */; };
 		B52D4EA9113A99CB00AA68CD /* ASISpaceTimeMap.m in Sources */ = {isa = PBXBuildFile; fileRef = B52D4EA8113A99CB00AA68CD /* ASISpaceTimeMap.m */; };
 		B52D4F61113AD2DF00AA68CD /* ASIWorldMap.m in Sources */ = {isa = PBXBuildFile; fileRef = B52D4F60113AD2DF00AA68CD /* ASIWorldMap.m */; };
-		B52D5069113AE96F00AA68CD /* PathFinderView.m in Sources */ = {isa = PBXBuildFile; fileRef = B52D5068113AE96F00AA68CD /* PathFinderView.m */; };
-		B55DB94E113BD7850054C3C1 /* SimulationView.m in Sources */ = {isa = PBXBuildFile; fileRef = B55DB94D113BD7850054C3C1 /* SimulationView.m */; };
 		B55DBE9E113D2A540054C3C1 /* ExampleFailures in Resources */ = {isa = PBXBuildFile; fileRef = B55DBE90113D2A540054C3C1 /* ExampleFailures */; };
 		B55DBE9F113D2A540054C3C1 /* Examples in Resources */ = {isa = PBXBuildFile; fileRef = B55DBE94113D2A540054C3C1 /* Examples */; };
+		B55DBFFE113D41DF0054C3C1 /* SimulationView.m in Sources */ = {isa = PBXBuildFile; fileRef = B55DBFFA113D41DF0054C3C1 /* SimulationView.m */; };
+		B55DBFFF113D41DF0054C3C1 /* PathFinderView.m in Sources */ = {isa = PBXBuildFile; fileRef = B55DBFFC113D41DF0054C3C1 /* PathFinderView.m */; };
 		B5C033D01139907300F6B805 /* ASIObjectMap.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C033BA1139907300F6B805 /* ASIObjectMap.m */; };
 		B5C033D11139907300F6B805 /* ASIImmovableObject.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C033BC1139907300F6B805 /* ASIImmovableObject.m */; };
 		B5C033D21139907300F6B805 /* EditView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C033BE1139907300F6B805 /* EditView.m */; };
@@ -56,12 +56,12 @@
 		B52D4EA8113A99CB00AA68CD /* ASISpaceTimeMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASISpaceTimeMap.m; sourceTree = "<group>"; };
 		B52D4F5F113AD2DF00AA68CD /* ASIWorldMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIWorldMap.h; sourceTree = "<group>"; };
 		B52D4F60113AD2DF00AA68CD /* ASIWorldMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIWorldMap.m; sourceTree = "<group>"; };
-		B52D5067113AE96F00AA68CD /* PathFinderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = PathFinderView.h; sourceTree = "<group>"; };
-		B52D5068113AE96F00AA68CD /* PathFinderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = PathFinderView.m; sourceTree = "<group>"; };
-		B55DB94C113BD7850054C3C1 /* SimulationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SimulationView.h; sourceTree = "<group>"; };
-		B55DB94D113BD7850054C3C1 /* SimulationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SimulationView.m; sourceTree = "<group>"; };
 		B55DBE90113D2A540054C3C1 /* ExampleFailures */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ExampleFailures; sourceTree = "<group>"; };
 		B55DBE94113D2A540054C3C1 /* Examples */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Examples; sourceTree = "<group>"; };
+		B55DBFFA113D41DF0054C3C1 /* SimulationView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SimulationView.m; path = Classes/SimulationView.m; sourceTree = "<group>"; };
+		B55DBFFB113D41DF0054C3C1 /* SimulationView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SimulationView.h; path = Classes/SimulationView.h; sourceTree = "<group>"; };
+		B55DBFFC113D41DF0054C3C1 /* PathFinderView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PathFinderView.m; path = Classes/PathFinderView.m; sourceTree = "<group>"; };
+		B55DBFFD113D41DF0054C3C1 /* PathFinderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PathFinderView.h; path = Classes/PathFinderView.h; sourceTree = "<group>"; };
 		B5C033B91139907300F6B805 /* ASIObjectMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIObjectMap.h; sourceTree = "<group>"; };
 		B5C033BA1139907300F6B805 /* ASIObjectMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIObjectMap.m; sourceTree = "<group>"; };
 		B5C033BB1139907300F6B805 /* ASIImmovableObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIImmovableObject.h; sourceTree = "<group>"; };
@@ -185,10 +185,10 @@
 				B5C033BE1139907300F6B805 /* EditView.m */,
 				B5C034E4113997AF00F6B805 /* AssessorView.h */,
 				B5C034E5113997AF00F6B805 /* AssessorView.m */,
-				B52D5067113AE96F00AA68CD /* PathFinderView.h */,
-				B52D5068113AE96F00AA68CD /* PathFinderView.m */,
-				B55DB94C113BD7850054C3C1 /* SimulationView.h */,
-				B55DB94D113BD7850054C3C1 /* SimulationView.m */,
+				B55DBFFB113D41DF0054C3C1 /* SimulationView.h */,
+				B55DBFFA113D41DF0054C3C1 /* SimulationView.m */,
+				B55DBFFD113D41DF0054C3C1 /* PathFinderView.h */,
+				B55DBFFC113D41DF0054C3C1 /* PathFinderView.m */,
 			);
 			name = "Mac Demo UI";
 			sourceTree = "<group>";
@@ -315,8 +315,8 @@
 				B52D4E25113A90F000AA68CD /* ASISpaceTimePathFinder.m in Sources */,
 				B52D4EA9113A99CB00AA68CD /* ASISpaceTimeMap.m in Sources */,
 				B52D4F61113AD2DF00AA68CD /* ASIWorldMap.m in Sources */,
-				B52D5069113AE96F00AA68CD /* PathFinderView.m in Sources */,
-				B55DB94E113BD7850054C3C1 /* SimulationView.m in Sources */,
+				B55DBFFE113D41DF0054C3C1 /* SimulationView.m in Sources */,
+				B55DBFFF113D41DF0054C3C1 /* PathFinderView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
