@@ -1,0 +1,11 @@
+ASIPathFinder is a cooperative path finder that may be most useful for Real-Time Strategy Games.
+
+Portions are based on the Path Finder I wrote for Space Harvest (http://spaceharvest.com) though I have not yet extracted all the features I want to include. Consider this code alpha quality, use at your own risk! :)
+
+There are no docs yet. I hope to provide full documentation, cleanup the example code, fix bugs, and hopefully provide a more real-world example project soon.
+
+ASIPathFinder is a variation on techniques described by David Silver in this paper:
+http://webdocs.cs.ualberta.ca/~silver/David_Silver/Publications_files/coop-path-AIWisdom.pdf
+
+ASISearchNodeList is based on the binary heap algorithm as explained by Patrick Lester here:
+http://www.policyalmanac.org/games/binaryHeaps.htm
