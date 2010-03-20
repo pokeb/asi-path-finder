@@ -10,7 +10,7 @@
 
 @implementation ASIPath
 
-- (id)initWithInitialSize:(int)size
+- (id)initWithPathSize:(int)size
 {
 	self = [super init];
 	length = size;
@@ -26,10 +26,16 @@
 	[super dealloc];
 }
 
+- (void)clear
+{
+	readCounter = 0;
+	writeCounter = 0;
+}
+
 - (void)addNode:(Position3D)newPosition
 {
 	if (writeCounter >= length) {
-		//NSLog(@"Argh!");
+		NSLog(@"Attempted to add too many nodes to this path!");
 		return;
 	}
 	Position3D *p = nodes+writeCounter;
@@ -41,7 +47,7 @@
 - (void)insertNodeAtStart:(Position3D)newPosition
 {
 	if (writeCounter >= length) {
-		//NSLog(@"Argh!");
+		NSLog(@"Attempted to add too many nodes to this path!");
 		return;
 	}
 	memcpy(nodes+1, nodes, sizeof(Position3D)*(length-1));

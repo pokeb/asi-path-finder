@@ -102,5 +102,8 @@ NSString *StringFromSize3D(Size3D size);
 // Turn a string into a position
 Size3D Size3DFromString(NSString *string);
 
+
 extern NSInteger sortByDistance(id obj1, id obj2, void *fromPos);
+extern NSInteger sortByStrategicValue(id obj1, id obj2, void *fromPos);
+
 

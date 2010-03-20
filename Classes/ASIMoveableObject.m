@@ -26,10 +26,16 @@ static unsigned short nextTag = 0;
 }
 
 - (void)performPathFinding
-{		
+{
+	// If we haven't done path finding before, create a path assessor
+	if (!pathAssessment) {
+		[self setPathAssessment:[[[ASISpatialPathAssessor alloc] initWithMap:map] autorelease]];
+		[pathAssessment setObject:self];	
+	}
+	
 	// This little hack alternates the destination between current pos and target pos
 	// It basically allows us to remain in one place when we're in range of the target
-	// But move if we need to if another object wants this square
+	// But try to move to another position that's in range of the target if we need to if another object wants this square
 	if (target) {
 		
 		if ([self isObjectWithinLineOfFire:target]) {
@@ -38,25 +44,36 @@ static unsigned short nextTag = 0;
 		} else {
 			if (!EqualPositions(destination, [target position])) {
 				destination = [target position];
-				[pathAssessment release];
-				pathAssessment = nil;
+				[pathAssessment reset];
 			}
 			movingToAttackTarget = YES;
 		}
 	}
 	
-	if (!pathAssessment) {
-		[self setPathAssessment:[[[ASISpatialPathAssessor alloc] initWithMap:map] autorelease]];
-		[pathAssessment setObject:self];
+	// If we didn't finish assessing the path last time around, we need to resume path assessment
+	if (![pathAssessment haveFinishedAssessingPath]) {
 		[pathAssessment assessPathFrom:destination to:position];	
 		offCourseCount = 0;
 		didFailToFindARouteToTarget = [pathAssessment failedToFindRoute];
-	} else if (![pathAssessment haveAssessed:position]) {
+		
+	// If we didn't find a route to the target, let's stay where we are for now
+	} else if (didFailToFindARouteToTarget) {
+		offCourseCount++;
+		
+		// After 5 planning steps, we'll try to find a path again
+		if (offCourseCount == 5) {
+			offCourseCount = 0;
+			didFailToFindARouteToTarget = NO;
+		}
+		
+	// We have been blown off course, so we need to perform path assessment to get us back on track
+	} else if (!EqualPositions(position, destination) && ![pathAssessment haveAssessed:position]) {
 		offCourseCount++;
 		if (offCourseCount == 3) {
-			[self setPathAssessment:[[[ASISpatialPathAssessor alloc] initWithMap:map] autorelease]];
-			[pathAssessment setObject:self];
+			[pathAssessment reset];
 			offCourseCount = 0;	
+		} else {
+			[pathAssessment setShouldPerformOffCourseAssessment:YES];
 		}
 		[pathAssessment assessPathFrom:destination to:position];
 		didFailToFindARouteToTarget = [pathAssessment failedToFindRoute];
@@ -69,8 +86,7 @@ static unsigned short nextTag = 0;
 	}
 	[pathFinder setAttemptToStayInSameLocation:didFailToFindARouteToTarget];
 	
-	
-	[self setPath:[pathFinder findPath]];
+	[pathFinder findPath];
 }
 
 - (void)setDestination:(Position3D)newDestination
@@ -151,7 +167,11 @@ static unsigned short nextTag = 0;
 	[self setHaveMoved:YES];
 }
 
-
+// This object won't nescessarily be in this position forever, so we'll allow other objects to pass through it
+- (BOOL)isPassableByObject:(MapObject *)mapObject movingNow:(BOOL)aboutToMove atPosition:(Position3D *)myPosition fromPosition:(Position3D *)theirPosition withCost:(float *)cost andDistance:(float *)distance
+{
+	return YES;
+}
 
 @synthesize destination;
 @synthesize pathAssessment;

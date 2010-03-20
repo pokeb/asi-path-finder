@@ -19,6 +19,13 @@
 	return self;
 }
 
+
+// By default, objects cannot pass through each other, so we'll return NO
+- (BOOL)isPassableByObject:(MapObject *)mapObject movingNow:(BOOL)aboutToMove atPosition:(Position3D *)myPosition fromPosition:(Position3D *)theirPosition withCost:(float *)cost andDistance:(float *)distance
+{
+	return NO;
+}
+
 - (BOOL)allowsCornerCutting
 {
 	return YES;

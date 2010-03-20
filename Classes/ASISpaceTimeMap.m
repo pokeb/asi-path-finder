@@ -11,7 +11,7 @@
 
 @implementation ASISpaceTimeMap
 
-- (id)initWithSize:(CGSize)newSize timeSpan:(int)newTimeSpan
+- (id)initWithSize:(CGSize)newSize timeSpan:(unsigned int)newTimeSpan
 {
 	self = [super initWithMapSize:Size3DMake(newSize.width, newSize.height, newTimeSpan)];
 	return self;
@@ -22,7 +22,7 @@
 	return mapSize.zSize;
 }
 
-- (void)setTimeSpan:(int)newTSize
+- (void)setTimeSpan:(unsigned int)newTSize
 {
 	if (grid) {
 		free(grid);
@@ -39,102 +39,74 @@
 	if (grid) {
 		memset(grid, 0, mapSize.zSize*xByY*sizeof(id));
 	}		
-	
 }
 
 - (void)incrementTime
 {
-	int copyLength = xByY*timePointer;
-	memset(grid+copyLength, 0, 2*xByY*sizeof(id));
-	
-	timePointer+=2;
-	if (timePointer == mapSize.zSize) {
-		timePointer = 0;
+	currentTimeStep++;
+	if (currentTimeStep == mapSize.zSize) {
+		currentTimeStep = 0;
+		[self clear];
 	}
-	gameTime+=2;
 }
 
-- (id)objectAtPosition:(CGPoint)position time:(int)time
+- (id)objectAtPosition:(CGPoint)position time:(unsigned int)time
 {
 	return [super objectAtPosition:Position3DMake(position.x, position.y, time)];
 }
 
-- (void)setObject:(id)object atPosition:(CGPoint)position time:(int)time
+- (void)setObject:(id)object atPosition:(CGPoint)position time:(unsigned int)time
 {
 	[super setObject:object atPosition:Position3DMake(position.x, position.y, time)];
 }
 
-- (void)setObject:(id)object atPositionIndefinitely:(CGPoint)position fromTime:(int)time
+- (void)setObject:(id)object atPosition:(CGPoint)position fromTime:(unsigned int)time forTimeSteps:(unsigned int)timeSteps
 {
-	int t = time;
-	int i=0;
-	while (i < mapSize.zSize-time) {
-		[super setObject:object atPosition:Position3DMake(position.x, position.y, t)];
-		i++;
-		t++;
+	Position3D startPos = Position3DMake(position.x, position.y, time);
+	if (startPos.x >= mapSize.xSize || startPos.y >= mapSize.ySize || startPos.z+(int)timeSteps >= mapSize.zSize) {
+		return;
 	}
-}
-
-
-- (void)removeObject:(id)object atPositionIndefinitely:(CGPoint)position fromTime:(int)time
-{
-	int t = time;
 	
-	int i=0;
-	while (i < mapSize.zSize-time) {
-		[super removeObject:object atPosition:Position3DMake(position.x, position.y, t)];
-		i++;
-		t++;
+	id *pos = grid+startPos.x+(startPos.y*mapSize.xSize)+(startPos.z*xByY);
+	unsigned int i;
+	for (i=0; i<timeSteps; i++) {
+		if (*pos != object) {
+			*pos = object;
+		}
+		pos+=xByY;
 	}
 }
 
-- (NSString *)description
+- (void)removeObject:(id)object atPosition:(CGPoint)position fromTime:(unsigned int)time forTimeSteps:(unsigned int)timeSteps
 {
-	return [self printMapForTime:0];
+	Position3D startPos = Position3DMake(position.x, position.y, time);
+	if (startPos.x >= mapSize.xSize || startPos.y >= mapSize.ySize || startPos.z+(int)timeSteps >= mapSize.zSize) {
+		return;
+	}
+	
+	id *pos = grid+startPos.x+(startPos.y*mapSize.xSize)+(startPos.z*xByY);
+	unsigned int i;
+	for (i=0; i<timeSteps; i++) {
+		if (*pos != object) {
+			*pos = NULL;
+		}
+		pos+=xByY;
+	}
 }
 
-- (NSString *)printMapForTime:(int)time
+- (void)setObject:(id)object atPositionIndefinitely:(CGPoint)position fromTime:(unsigned int)time
 {
-	NSString *s = @"\r\n  ";
-	NSString *cost;
-	int x,y;
-	NSString *xPos, *yPos;
-	NSString *line = @"  -";
-	for (x=0; x<mapSize.xSize; x++) {
-		line = [NSString stringWithFormat:@"%@---",line];
-		
-		xPos = [NSString stringWithFormat:@"%hi",x];
-		if ([xPos length] == 1) {
-			xPos = [NSString stringWithFormat:@"0%@",xPos];
-		}
-		s = [NSString stringWithFormat:@"%@ %@",s,xPos];
-	}
-	line = [NSString stringWithFormat:@"%@\r\n",line];
-	s = [NSString stringWithFormat:@"%@\r\n%@",s,line];
-	for (y=0; y<mapSize.ySize; y++) {
-		
-		yPos = [NSString stringWithFormat:@"%hi",y];
-		if ([yPos length] == 1) {
-			yPos = [NSString stringWithFormat:@"0%@",yPos];
-		}
-		s = [NSString stringWithFormat:@"%@%@|",s,yPos];
-
-		for (x=0; x<mapSize.xSize; x++) {
-			
-			cost = [NSString stringWithFormat:@"%hi",[[self objectAtPosition:CGPointMake(x,y) time:time] tag]];
-			if ([cost length] == 1) {
-				cost = [NSString stringWithFormat:@"0%@",cost];
-			}
-			if ([cost isEqualToString:@"00"]) {
-				cost = @"  ";
-			}
-			s = [NSString stringWithFormat:@"%@%@|",s,cost];
-		}
-		s = [NSString stringWithFormat:@"%@\r\n%@",s,line];
-	}
-	return s;
+	[self setObject:object atPosition:position fromTime:time forTimeSteps:mapSize.zSize-time];
 }
 
+
+- (void)removeObject:(id)object atPositionIndefinitely:(CGPoint)position fromTime:(unsigned int)time
+{
+	[self removeObject:object atPosition:position fromTime:time forTimeSteps:mapSize.zSize-time];
+}
+
+
+
+@synthesize currentTimeStep;
 @synthesize timePointer;
-@synthesize gameTime;
 @end

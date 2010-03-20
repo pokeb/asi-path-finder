@@ -27,7 +27,9 @@
 		if (![map objectAtPosition:position]) {
 			[[map spaceTimeMap] clear];
 			[selectedUnit setDestination:position];
-			[selectedUnit performPathFinding];
+			while (![[selectedUnit pathAssessment] haveFinishedAssessingPath]) {
+				[selectedUnit performPathFinding];
+			}
 			if ([[selectedUnit pathAssessment] failedToFindRoute]) {
 				[assessmentStatus setStringValue:@"✘ Failed to find route"];
 			} else {

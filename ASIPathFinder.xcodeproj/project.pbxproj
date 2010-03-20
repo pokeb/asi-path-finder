@@ -87,10 +87,10 @@
 		B5C0347A1139953A00F6B805 /* ASIPath.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIPath.m; sourceTree = "<group>"; };
 		B5C0347C1139958000F6B805 /* ASISearchNodeList.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASISearchNodeList.h; sourceTree = "<group>"; };
 		B5C0347D1139958000F6B805 /* ASISearchNodeList.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASISearchNodeList.m; sourceTree = "<group>"; };
-		B5C034BA113996F400F6B805 /* ASIPathSearchDataTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIPathSearchDataTypes.h; sourceTree = "<group>"; };
 		B5C034BB113996F400F6B805 /* ASIPathSearchDataTypes.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIPathSearchDataTypes.m; sourceTree = "<group>"; };
 		B5C034E4113997AF00F6B805 /* AssessorView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AssessorView.h; path = Classes/AssessorView.h; sourceTree = "<group>"; };
 		B5C034E5113997AF00F6B805 /* AssessorView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AssessorView.m; path = Classes/AssessorView.m; sourceTree = "<group>"; };
+		B5C92E53113FED8C008C9E5D /* ASIPathSearchDataTypes.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIPathSearchDataTypes.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -206,7 +206,7 @@
 				B5C034771139952300F6B805 /* ASISpatialPathAssessor.m */,
 				B52D4E21113A90F000AA68CD /* ASISpaceTimePathFinder.h */,
 				B52D4E22113A90F000AA68CD /* ASISpaceTimePathFinder.m */,
-				B5C034BA113996F400F6B805 /* ASIPathSearchDataTypes.h */,
+				B5C92E53113FED8C008C9E5D /* ASIPathSearchDataTypes.h */,
 				B5C034BB113996F400F6B805 /* ASIPathSearchDataTypes.m */,
 				B5C0347C1139958000F6B805 /* ASISearchNodeList.h */,
 				B5C0347D1139958000F6B805 /* ASISearchNodeList.m */,

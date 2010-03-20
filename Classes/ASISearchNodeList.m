@@ -25,21 +25,23 @@
 
 - (void)increaseSize
 {
-
 	if (heap) {
 		allocatedLength *= 2;
 		heap = realloc(heap, sizeof(Node)*allocatedLength);
 	} else {
-		allocatedLength += 10;
+		allocatedLength = 10;
 		heap = malloc(sizeof(Node)*allocatedLength);
 	}
 }
 
-- (void)addNodeWithoutComparison:(Node *)node
+- (void)addNodeWithoutComparison:(Node)node
 {
-	Node *position = heap+length;
-	*position = *node;
 	length++;
+	if (length == allocatedLength) {
+		[self increaseSize];
+	}
+	Node *position = heap+length-1;
+	*position = node;
 }
 
 - (void)addNode:(Node *)node
@@ -59,7 +61,7 @@
 	*position = *node;
 	while (currentPosition > 1) {
 		
-		currentPosition = floor(currentPosition/2.0f);
+		currentPosition = floorf(currentPosition/2.0f);
 		Node *childNode = heap+currentPosition-1;
 		
 		if (childNode->distance > node->distance) {
@@ -74,6 +76,8 @@
 				*position = *childNode;
 				*childNode = *node;
 				position = childNode;
+			} else {
+				break;
 			}
 		} else {
 			break;

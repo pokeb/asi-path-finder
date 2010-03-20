@@ -13,6 +13,7 @@
 #import "ASIImmovableObject.h"
 #import "ASIMoveableObject.h"
 #import "SimulationView.h"
+#import "ASISpaceTimeMap.h"
 
 @implementation MapDocument
 

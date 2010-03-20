@@ -8,6 +8,7 @@
 //  An array of positions representing a path - objects use this to figure out where they are moving to next.
 //  A Path object is the output of ASISpaceTimePathFinder. 
 //  For speed, it has a fixed size, which is not a problem for our purposes as each path will always be exactly the same length
+//  Rather than allocating 
 
 #import "ASIPathSearchDataTypes.h"
 
@@ -27,7 +28,10 @@
 }
 
 // Create a path with a size
-- (id)initWithInitialSize:(int)size;
+- (id)initWithPathSize:(int)size;
+
+// Clear the path
+- (void)clear;
 
 // Add a position to the end of the path 
 - (void)addNode:(Position3D)newPosition;

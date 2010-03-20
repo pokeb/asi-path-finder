@@ -15,14 +15,11 @@
 
 @interface ASISpaceTimeMap : ASIObjectMap {
 	
-	// Used internally to record our position in the set of time steps we have
-	// When incrementTime is called, we clear the current time step, then increment timePointer so the current time step is now the next one
-	// Since we have a fixed number of time steps to keep track of, when timePointer exceeds the number of timeSteps (timeSpan), we simply reset to zero
-	// This trick means we don't have to move anything in memory to increment time
-	unsigned char timePointer;
+	// Record our positions in the set of time steps we have
+	// When incrementTime is called, we increment this, or reset it to zero if we're at the end of the time span
+	// This allows us to perform path finding part way through the time span
+	unsigned char currentTimeStep;
 	
-	// A counter that increases every time we increment time - can be used in debugging to see which time step we're on
-	int gameTime;
 }
 
 // Clears the whole space time map for all time steps
@@ -30,23 +27,27 @@
 
 // The number of time steps this space time map will hold
 - (int)timeSpan;
-- (void)setTimeSpan:(int)newTimeSpan;
+- (void)setTimeSpan:(unsigned int)newTimeSpan;
 
 // Create a new space time map with a map size, and the number of time steps
-- (id)initWithSize:(CGSize)size timeSpan:(int)newTimeSpan;
+- (id)initWithSize:(CGSize)size timeSpan:(unsigned int)newTimeSpan;
+
+// Set an object at a position for a certain amount of time
+- (void)setObject:(id)object atPosition:(CGPoint)position fromTime:(unsigned int)time forTimeSteps:(unsigned int)timeSteps;
+
+// Remove an object at a position for a certain amount of time
+- (void)removeObject:(id)object atPosition:(CGPoint)position fromTime:(unsigned int)time forTimeSteps:(unsigned int)timeSteps;
 
 // Convenience method to set an object at a position for all time steps we're tracking
-- (void)setObject:(id)object atPositionIndefinitely:(CGPoint)position fromTime:(int)time;
+- (void)setObject:(id)object atPositionIndefinitely:(CGPoint)position fromTime:(unsigned int)time;
 
 // Convenience method to remove an object from a position for all time steps we're tracking
-- (void)removeObject:(id)object atPositionIndefinitely:(CGPoint)position fromTime:(int)time;
+- (void)removeObject:(id)object atPositionIndefinitely:(CGPoint)position fromTime:(unsigned int)time;
 
-// Clear the current time step, and increment timePointer so we can deal with the next one
+// Increment currentTimeStep, and clear the whole map if we're on step 0
 - (void)incrementTime;
 
-// May be helpful for debugging - prints out a particular timestep to the console
-- (NSString *)printMapForTime:(int)time;
 
+@property (assign, nonatomic) unsigned char currentTimeStep;
 @property (assign, nonatomic) unsigned char timePointer;
-@property (assign, nonatomic) int gameTime;
 @end

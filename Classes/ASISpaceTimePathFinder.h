@@ -25,7 +25,8 @@
 	// This might be used when telling objects to attack another object - they only need to get within range of it to attack
 	BOOL stopWhenWithinRangeOfTarget;
 	
-	// Set when the path assessor couldn't find a route, so we'll use our current location as the target
+	// Set to YES when the path assessor couldn't find a route, so we'll use our current location as the target
+	// We do this rather than setting the destination to the origin, so the object can re-attempt to find a route later on
 	BOOL attemptToStayInSameLocation; 
 }
 

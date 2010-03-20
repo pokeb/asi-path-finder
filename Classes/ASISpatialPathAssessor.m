@@ -15,6 +15,7 @@
 
 @implementation ASISpatialPathAssessor
 
+#define MAX_NODES_TO_ASSESS_PER_STEP 75
 
 - (id)initWithMap:(ASIWorldMap *)newMap
 {
@@ -30,24 +31,39 @@
 	return self;
 }
 
-- (float)realDistanceFromDestination:(Position3D)position
+- (void)reset
 {
-	return positions[position.x+(position.y*[map mapSize].xSize)];
+	[self setNodeList:nil];
+	failedToFindRoute = NO;
+	haveFinishedAssessingPath = NO;
+	Size3D size = [map mapSize];
+	int count = size.xSize*size.ySize;
+	memset(positions, 0, sizeof(float)*count);
+	
 }
+
+
 
 - (void)assessPathFrom:(Position3D)newOrigin to:(Position3D)newDestination
 {
+	// If we're assessing a path between the same positions, stop
 	if (EqualPositions(newOrigin, newDestination)) {
+		haveFinishedAssessingPath = YES;
 		return;
 	}
 	
-	Size3D size = [map mapSize];
-
-	ASISearchNodeList *nodeList = [[ASISearchNodeList alloc] init];
-
+	// Have we already started finding a path? If so, let's resume path finding
+	if (nodeList) {
+		[self resumeSearch];
+		return;
+	}
+	
+	
+	[self setNodeList:[[[ASISearchNodeList alloc] init] autorelease]];
 	[self setOrigin:newOrigin];
 	[self setDestination:newDestination];
 	
+	// This will be our starting point node
 	Node node;
 	node.position = newOrigin;
 	node.cost = 0;
@@ -56,42 +72,45 @@
 	node.parentNode = NULL;
 	[nodeList addNode:&node];
 	
-
+	[self resumeSearch];
+	
+}
+	
+- (void)resumeSearch
+{
+	Size3D size = [map mapSize];
 	BOOL foundPath = NO;
 	int x,y;
 	
 	Position3D position;
-	Position3D nodePosition;
 	
 	MapObject *mapObject;
 	float distance;
 	float cost;
-	float existingCostForThisPosition;
+	Node node;
 	
-	int searched = 0;
 	char searchDirection;
 	
+	// Search Z represents the 'z' position on the map that we want to search in while finding a path
+	// It is hard coded here to 0, but if you have a 3D map, you might want to use another number for path finding on a plane above the ground
 	signed char searchZ = 0;
 	
-	
-//	BOOL canAttack = ([object attackPowerAgainst:object]);
-//	Alliance *alliance = [[object team] alliance];
-	
-//	SunObject *target = [object target];
-//	Position targetPosition = [target position];
-	
-	//NSLog(@"---");
+	unsigned int assessedNodeCount = 0;
+	unsigned int maxSearchNodes = MAX_NODES_TO_ASSESS_PER_STEP;
 	
 	while ([nodeList length]) {
 		
-		node = *[nodeList firstNode];
-		//NSLog(@"(%hi,%hi) distance: %hu cost: %hu",node.position.x,node.position.y,node.distance,node.cost);
-		[nodeList removeFirstNode];
+		// Have we asssessed more nodes than our maximum for this pass?
+		assessedNodeCount++;
+		if (assessedNodeCount == maxSearchNodes) {
+			// Yes, stop path finding, we can resume later
+			break;
+		}
 		
-		searched++;
-
-		nodePosition = node.position;
-
+		// Grab the best node to look at next from the list
+		node = *[nodeList firstNode];
+		[nodeList removeFirstNode];
+		NSLog(@"%hi,%hi",node.position.x,node.position.y);
 		
 		searchDirection = -1;
 
@@ -99,77 +118,90 @@
 			for (y=-1; y<2; y++) {
 				if (x != 0 || y != 0) {
 					
+					// Change direction - this is used for making sure we aren't cutting corners, and to make travelling diagaonally more expensive
+					// Values for search direction are defined in ASIPathSearchDataTypes.h
 					searchDirection++;			
 					
-					position = Position3DMake(nodePosition.x+x,nodePosition.y+y,searchZ);
-					
+					// Create a new position to represent the place we are searching
+					position = Position3DMake(node.position.x+x,node.position.y+y,searchZ);
 
-					existingCostForThisPosition = positions[position.x+(position.y*size.xSize)];
-					// Are we out of bounds
-					if (position.x < 0 || position.x > size.xSize-1 || position.y < 0 || position.y > size.ySize-1 || EqualPositions(origin,position)) {
+					// Are we out of bounds?
+					if (position.x < 0 || position.x > size.xSize-1 || position.y < 0 || position.y > size.ySize-1) {
 						continue;
 					}
 					
-					cost = node.cost+1;	
-
-		
-					mapObject = [map objectAtPosition:position];
+					// Have we looked at this position already?
+					if (positions[position.x+(position.y*size.xSize)]) {
 						
-					if (mapObject) {
-						if (![mapObject isKindOfClass:[ASIMoveableObject class]]) {
+						// If we are resuming a search because we are off course, and have already assessed this node, let's stop
+						if (shouldPerformOffCourseAssessment) {
+							foundPath = YES;
+							break;
+						} else {
 							continue;
-						} else if (mapObject != object) {
-							cost += 6;
-
 						}
 					}
 					
-					if (existingCostForThisPosition > 0 && existingCostForThisPosition < cost) {
-						continue;
+					// By default, the cost of travelling to this node will be 1 more than the cost of travelling to its parent node
+					// Objects we pass through may increase this cost
+					cost = node.cost+1;	
+
+					mapObject = [map objectAtPosition:position];
+					// Is there an object at this position already?
+					if (mapObject) {
+						
+						// Ask the object if we can pass through it, and, if so, how much extra will it cost us to do so
+						// Why would we want to allowing objects to travel through others at an increased cost?
+						// An example: To allow objects that can attack to find a path _through_ enemy walls.
+						// If the cost is increased to account for the fact that they'll have to destroy the walls on the way, it may be faster for an object to destroy an obstacle rather than go around it
+						if (![mapObject isPassableByObject:object movingNow:NO atPosition:&position fromPosition:&node.position withCost:&cost andDistance:&distance]) {
+							continue;
+						}
 					}
 					
 					if (searchZ == 0) {
-					
 
 						
-						//Stop paths hugging corners
+						// Stop paths hugging corners
+						// This basically is used to prevent objects appearing to walk through the corner of another object
+						// Certain objects may allow this - they'll return YES to allowsCornerCutting
 						switch (searchDirection) {
 							case PathDirectionNorth:
-								mapObject = [map objectAtPosition:Position3DMake(nodePosition.x-1,nodePosition.y,0)];
+								mapObject = [map objectAtPosition:Position3DMake(node.position.x-1,node.position.y,0)];
 								if (mapObject && ![mapObject allowsCornerCutting]) {
 									continue;
 								}
-								mapObject = [map objectAtPosition:Position3DMake(nodePosition.x,nodePosition.y-1,0)];
+								mapObject = [map objectAtPosition:Position3DMake(node.position.x,node.position.y-1,0)];
 								if (mapObject && ![mapObject allowsCornerCutting]) {
 									continue;
 								}
 								break;
 							case PathDirectionWest:
-								mapObject = [map objectAtPosition:Position3DMake(nodePosition.x-1,nodePosition.y,0)];
+								mapObject = [map objectAtPosition:Position3DMake(node.position.x-1,node.position.y,0)];
 								if (mapObject && ![mapObject allowsCornerCutting]) {
 									continue;
 								}
-								mapObject = [map objectAtPosition:Position3DMake(nodePosition.x,nodePosition.y+1,0)];
+								mapObject = [map objectAtPosition:Position3DMake(node.position.x,node.position.y+1,0)];
 								if (mapObject && ![mapObject allowsCornerCutting]) {
 									continue;
 								}
 								break;
 							case PathDirectionEast:
-								mapObject = [map objectAtPosition:Position3DMake(nodePosition.x+1,nodePosition.y,0)];
+								mapObject = [map objectAtPosition:Position3DMake(node.position.x+1,node.position.y,0)];
 								if (mapObject && ![mapObject allowsCornerCutting]) {
 									continue;
 								}
-								mapObject = [map objectAtPosition:Position3DMake(nodePosition.x,nodePosition.y-1,0)];
+								mapObject = [map objectAtPosition:Position3DMake(node.position.x,node.position.y-1,0)];
 								if (mapObject && ![mapObject allowsCornerCutting]) {
 									continue;
 								}
 								break;
 							case PathDirectionSouth:
-								mapObject = [map objectAtPosition:Position3DMake(nodePosition.x+1,nodePosition.y,0)];
+								mapObject = [map objectAtPosition:Position3DMake(node.position.x+1,node.position.y,0)];
 								if (mapObject && ![mapObject allowsCornerCutting]) {
 									continue;
 								}
-								mapObject = [map objectAtPosition:Position3DMake(nodePosition.x,nodePosition.y+1,0)];
+								mapObject = [map objectAtPosition:Position3DMake(node.position.x,node.position.y+1,0)];
 								if (mapObject && ![mapObject allowsCornerCutting]) {
 									continue;
 								}
@@ -181,11 +213,15 @@
 					}
 
 					
-
+					// If we get here, this node is a valid move, and we need to add it to the search list so we can look at where to go next from this position
+					
+					// Get a crow-files distance between here and our destination
 					distance = DistanceBetweenPositions(position, destination);				
 					
+					// Record the cost it will take to get here via the route we've taken
 					positions[position.x+(position.y*size.xSize)] = cost;
-					//NSLog(@"Cost for position (%hi,%hi) is %f",position.x,position.y,cost);
+
+					// Create a node we can add to the search list
 					Node n;
 					n.cost = cost;
 					n.distance = distance;
@@ -194,8 +230,10 @@
 					n.direction = searchDirection;
 					n.parentNode = &node;
 					
+					// Add the node to the search list
 					[nodeList addNode:&n];
 				
+					// If we've arrived at our destination, stop
 					if (EqualPositions(position, destination)) {
 						foundPath = YES;
 						break;
@@ -212,48 +250,25 @@
 		}
 
 	}
-	if (!foundPath) {
-		failedToFindRoute = YES;
+	if (assessedNodeCount == maxSearchNodes) {
+		// We had to stop path finding because we looked at more nodes than the maximum per cycle
+		// We can resume this search later
+	} else {
+		// We finished path finding
+		haveFinishedAssessingPath = YES;
+		
+		// Clear the search list - we no longer need it
+		[self setNodeList:nil];
+		
+		// Set failedToFindRoute to YES if we ran out of nodes to look at
+		failedToFindRoute = !foundPath;
 	}
-	[nodeList release];
 }
 
-- (NSString *)description
+
+- (float)realDistanceFromDestination:(Position3D)position
 {
-	NSString *s = @"\r\n  ";
-	NSString *cost;
-	Size3D size = [map mapSize];
-	int x,y;
-	NSString *xPos, *yPos;
-	NSString *line = @"  -";
-	for (x=0; x<size.xSize; x++) {
-		line = [NSString stringWithFormat:@"%@---",line];
-		
-		xPos = [NSString stringWithFormat:@"%hi",x];
-		if ([xPos length] == 1) {
-			xPos = [NSString stringWithFormat:@"0%@",xPos];
-		}
-		s = [NSString stringWithFormat:@"%@ %@",s,xPos];
-	}
-	line = [NSString stringWithFormat:@"%@\r\n",line];
-	s = [NSString stringWithFormat:@"%@\r\n%@",s,line];
-	for (y=0; y<size.ySize; y++) {
-		
-		yPos = [NSString stringWithFormat:@"%hi",y];
-		if ([yPos length] == 1) {
-			yPos = [NSString stringWithFormat:@"0%@",yPos];
-		}
-		s = [NSString stringWithFormat:@"%@%@|",s,yPos];
-		for (x=0; x<size.xSize; x++) {
-			cost = [NSString stringWithFormat:@"%hi",positions[x+(y*size.xSize)]];
-			if ([cost length] == 1) {
-				cost = [NSString stringWithFormat:@"0%@",cost];
-			}
-			s = [NSString stringWithFormat:@"%@%@|",s,cost];
-		}
-		s = [NSString stringWithFormat:@"%@\r\n%@",s,line];
-	}
-	return s;
+	return positions[position.x+(position.y*[map mapSize].xSize)];
 }
 
 - (BOOL)haveAssessed:(Position3D)position
@@ -261,10 +276,9 @@
 	return (BOOL)positions[position.x+(position.y*[map mapSize].xSize)];
 }
 
-
-
 - (void)dealloc
 {
+	[nodeList release];
 	free(positions);
 	[super dealloc];
 }
@@ -275,4 +289,7 @@
 @synthesize map;
 @synthesize object;
 @synthesize failedToFindRoute;
+@synthesize haveFinishedAssessingPath;
+@synthesize shouldPerformOffCourseAssessment;
+@synthesize nodeList;
 @end

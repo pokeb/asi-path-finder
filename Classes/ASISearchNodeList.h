@@ -44,6 +44,6 @@
 - (void)log;
 
 // Adds a node to the end position. Only really useful for debugging
-- (void)addNodeWithoutComparison:(Node *)node;
+- (void)addNodeWithoutComparison:(Node)node;
 
 @end

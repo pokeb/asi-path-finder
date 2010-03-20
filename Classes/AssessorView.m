@@ -35,7 +35,9 @@ static NSDictionary *textAttributes = nil;
 			
 			ASISpatialPathAssessor *assessor = [[[ASISpatialPathAssessor alloc] initWithMap:map] autorelease];
 			[assessor setObject:selectedUnit];
-			[assessor assessPathFrom:[selectedUnit destination] to:[selectedUnit position]];
+			while (![assessor haveFinishedAssessingPath]) {
+				[assessor assessPathFrom:[selectedUnit destination] to:[selectedUnit position]];
+			}
 			[selectedUnit setPathAssessment:assessor];
 			
 			if ([assessor failedToFindRoute]) {
