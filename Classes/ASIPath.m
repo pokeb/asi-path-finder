@@ -56,7 +56,7 @@
 
 }
 
-- (int)length
+- (unsigned int)length
 {
 	return writeCounter-readCounter;
 }
@@ -67,6 +67,11 @@
 		return InvalidPosition;
 	}
 	return *(nodes+readCounter);	
+}
+
+- (Position3D)nodeAtIndex:(unsigned int )index
+{
+	return *(nodes+index);
 }
 
 - (void)removeFirstNode

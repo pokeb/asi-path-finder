@@ -8,7 +8,7 @@
 
 #import "ASISpatialPathAssessor.h"
 #import "ASIWorldMap.h"
-#import "ASIMoveableObject.h"
+#import "ASIUnit.h"
 #import "ASIPath.h"
 #import "ASIObjectMap.h"
 #import "ASISearchNodeList.h"
@@ -84,7 +84,7 @@
 	
 	Position3D position;
 	
-	MapObject *mapObject;
+	ASIMapObject *mapObject;
 	float distance;
 	float cost;
 	Node node;
@@ -110,7 +110,6 @@
 		// Grab the best node to look at next from the list
 		node = *[nodeList firstNode];
 		[nodeList removeFirstNode];
-		NSLog(@"%hi,%hi",node.position.x,node.position.y);
 		
 		searchDirection = -1;
 

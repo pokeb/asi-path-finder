@@ -11,7 +11,7 @@
 
 @class ASIWorldMap;
 @class TileObject;
-@class MapObject;
+@class ASIMapObject;
 
 @interface EditView : NSView {
 	NSPoint drawOffset;
@@ -21,7 +21,7 @@
 - (Position3D)positionAtPoint:(NSPoint)point;
 - (void)paintBuildingAtPosition:(Position3D)position;
 - (void)paintUnitAtPosition:(Position3D)position;
-- (void)paintObject:(MapObject *)object atPosition:(Position3D)position;
+- (void)paintObject:(ASIMapObject *)object atPosition:(Position3D)position;
 
 @property (assign, nonatomic) NSPoint drawOffset;
 @property (assign, nonatomic) ASIWorldMap *map;

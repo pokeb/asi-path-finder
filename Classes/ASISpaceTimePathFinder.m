@@ -9,10 +9,11 @@
 #import "ASISpaceTimePathFinder.h"
 #import "ASISpatialPathAssessor.h"
 #import "ASIWorldMap.h"
-#import "ASIMoveableObject.h"
+#import "ASIUnit.h"
 #import "ASIPath.h"
 #import "ASISpaceTimeMap.h"
 #import "ASISearchNodeList.h"
+#import "ASITeam.h"
 
 // Since only one object ever plans at once, we store the list of positions we've already looked at in a static array
 // If you were threading path finding (which I would strongly advise against) you need to allocate storage for this differently
@@ -27,7 +28,7 @@ static char positions[3] = {0,-1,1};
 
 static unsigned char searchDirections[8] = {PathDirectionNorthEast,PathDirectionSouthWest,PathDirectionNorthWest,PathDirectionNorth,PathDirectionWest,PathDirectionSouthEast,PathDirectionEast,PathDirectionSouth};
 
-- (id)initWithObject:(ASIMoveableObject *)newObject;
+- (id)initWithObject:(ASIUnit *)newObject;
 {
 	self = [super init];
 	[self setObject:newObject];
@@ -37,7 +38,7 @@ static unsigned char searchDirections[8] = {PathDirectionNorthEast,PathDirection
 - (ASIPath *)findPath
 {
 	ASIWorldMap *map = [object map];
-	ASISpaceTimeMap *spaceTimeMap = [map spaceTimeMap];
+	ASISpaceTimeMap *spaceTimeMap = [[object team] spaceTimeMap];
 	int timeSize = [spaceTimeMap timeSpan];
 	
 	// If the object is planning part way through the pre-calculated timespan, we need to remove its current path
@@ -108,7 +109,7 @@ static unsigned char searchDirections[8] = {PathDirectionNorthEast,PathDirection
 	
 	Position3D position;
 	Position3D nodePosition;
-	MapObject *mapObject;
+	ASIMapObject *mapObject;
 	float distance;
 	float cost;
 	unsigned char time;
@@ -118,7 +119,7 @@ static unsigned char searchDirections[8] = {PathDirectionNorthEast,PathDirection
 	int costPos;
 	Node *nearestNodeSoFar = NULL;
 	
-	MapObject *objectAtPosition = nil;
+	ASIMapObject *objectAtPosition = nil;
 	
 	BOOL atDestination;
 	BOOL canStayHere;

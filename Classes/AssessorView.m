@@ -8,7 +8,7 @@
 
 #import "AssessorView.h"
 #import "ASISpatialPathAssessor.h"
-#import "ASIMoveableObject.h"
+#import "ASIUnit.h"
 
 static NSDictionary *textAttributes = nil;
 
@@ -25,9 +25,9 @@ static NSDictionary *textAttributes = nil;
 {
 	NSPoint point = [self convertPoint:[theEvent locationInWindow] fromView:nil];
 	Position3D position = [self positionAtPoint:point];
-	MapObject *unit = [map objectAtPosition:position];
-	if (unit && [unit isKindOfClass:[ASIMoveableObject class]]) {
-		[self setSelectedUnit:(ASIMoveableObject *)unit];
+	ASIMapObject *unit = [map objectAtPosition:position];
+	if (unit && [unit isKindOfClass:[ASIUnit class]]) {
+		[self setSelectedUnit:(ASIUnit *)unit];
 	} else if (selectedUnit) {
 		
 		if (![map objectAtPosition:position]) {

@@ -1,5 +1,5 @@
 //
-//  MapObject.h
+//  ASIMapObject.h
 //  Part of ASIPathFinder --> http://allseeing-i.com/ASIPathFinder
 //
 //  Created by Ben Copsey on 27/02/2010.
@@ -9,7 +9,7 @@
 #import "ASIWorldMap.h"
 #import "ASIObjectMap.h"
 
-@interface MapObject : NSObject {
+@interface ASIMapObject : NSObject {
 	ASIWorldMap *map;
 	Position3D position;
 }
@@ -30,7 +30,7 @@
 // * theirPosition = the position the object is travelling from
 // * cost = the current cost the object will take to get here. We are passed a pointer to this value so we can increase it
 // * distance = similar to cost, the distance the object is from it's destination if it were here We can increase this too
-- (BOOL)isPassableByObject:(MapObject *)mapObject movingNow:(BOOL)aboutToMove atPosition:(Position3D *)myPosition fromPosition:(Position3D *)theirPosition withCost:(float *)cost andDistance:(float *)distance;
+- (BOOL)isPassableByObject:(ASIMapObject *)mapObject movingNow:(BOOL)aboutToMove atPosition:(Position3D *)myPosition fromPosition:(Position3D *)theirPosition withCost:(float *)cost andDistance:(float *)distance;
 
 
 @property (assign, nonatomic) ASIWorldMap *map;

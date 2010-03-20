@@ -7,10 +7,10 @@
 //
 //  An example of a fixed object (one that can't move)
 
-#import "MapObject.h"
+#import "ASIMapObject.h"
 
 
-@interface ASIImmovableObject : MapObject {
+@interface ASIImmovableObject : ASIMapObject {
 
 }
 

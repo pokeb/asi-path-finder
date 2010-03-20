@@ -8,26 +8,16 @@
 
 #import "MapDocument.h"
 #import "EGODatabase.h"
-#import "MapObject.h"
+#import "ASIMapObject.h"
 #import "ASIWorldMap.h"
 #import "ASIImmovableObject.h"
-#import "ASIMoveableObject.h"
+#import "ASIUnit.h"
 #import "SimulationView.h"
 #import "ASISpaceTimeMap.h"
+#import "ASITeam.h"
 
 @implementation MapDocument
 
-+ (NSArray *)examples
-{
-	NSString *resourcePath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Examples"];
-	return [[NSFileManager defaultManager] contentsOfDirectoryAtPath:resourcePath error:NULL];	
-}
-
-+ (NSArray *)failedExamples
-{
-	NSString *resourcePath = [[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"ExampleFailures"];
-	return [[NSFileManager defaultManager] contentsOfDirectoryAtPath:resourcePath error:NULL];	
-}
 
 
 - (void)awakeFromNib
@@ -36,58 +26,17 @@
 	[assessorView setMap:[self map]];
 	[pathFinderView setMap:[self map]];
 	[simulationView setMap:[self map]];
-	[super awakeFromNib];
+	[super awakeFromNib];	
+	[tabView selectFirstTabViewItem:nil];
+
 }
 
-- (BOOL)validateUserInterfaceItem:(id <NSValidatedUserInterfaceItem>)anItem
+
+
+
+- (void)switchToSimulationView
 {
-	if ([anItem tag] == 2000) {
-		NSMenuItem *item = (NSMenuItem *)anItem;
-		if ([item isHidden]) {
-			return NO;
-		}
-		[item setHidden:YES];
-		NSMenu *menu = [item menu];
-
-		
-		NSMenuItem *newItem;
-		
-		NSMenu *subMenu = [[[NSMenu alloc] initWithTitle:@"Examples"] autorelease];
-		for (NSString *file in [[MapDocument examples] reverseObjectEnumerator]) {
-			NSMenuItem *newItem = [[[NSMenuItem alloc] initWithTitle:[file stringByDeletingPathExtension] action:@selector(chooseExample:) keyEquivalent:@""] autorelease];
-			[newItem setRepresentedObject:[[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"Examples"] stringByAppendingPathComponent:file]];
-			[newItem setTarget:self];
-			[subMenu addItem:newItem];
-		}
-		newItem = [[[NSMenuItem alloc] initWithTitle:@"Examples" action:nil keyEquivalent:@""] autorelease];
-		[newItem setSubmenu:subMenu];
-		[menu addItem:newItem];
-
-		subMenu = [[[NSMenu alloc] initWithTitle:@"Failing Examples"] autorelease];
-		for (NSString *file in [[MapDocument failedExamples] reverseObjectEnumerator]) {
-			newItem = [[[NSMenuItem alloc] initWithTitle:[file stringByDeletingPathExtension] action:@selector(chooseExample:) keyEquivalent:@""] autorelease];
-			[newItem setRepresentedObject:[[[[NSBundle mainBundle] resourcePath] stringByAppendingPathComponent:@"ExampleFailures"] stringByAppendingPathComponent:file]];
-			[newItem setTarget:self];
-			[subMenu addItem:newItem];
-		}
-		newItem = [[[NSMenuItem alloc] initWithTitle:@"Failing Examples" action:nil keyEquivalent:@""] autorelease];
-		[newItem setSubmenu:subMenu];
-		[menu addItem:newItem];
-		
-		return NO;
-	}
-	return YES;
-}
-
-- (void)chooseExample:(id)sender
-{
-	MapDocument *document = [[[MapDocument alloc] init] autorelease];
-	[document readFromURL:[NSURL fileURLWithPath:[sender representedObject] isDirectory:NO] ofType:@"Map" error:NULL];
-	[document makeWindowControllers];
-	[[NSDocumentController sharedDocumentController] addDocument:document];
-	[document showWindows];
-							   
-
+	[tabView selectLastTabViewItem:nil];
 }
 
 - (id)init
@@ -95,6 +44,7 @@
     self = [super init];
     if (self) {
 		[self setMap:[ASIWorldMap map]];
+		[[[self map] teams] addObject:[[[ASITeam alloc] initWithMap:[self map]] autorelease]];
     }
     return self;
 }
@@ -119,6 +69,7 @@
     // Add any code here that needs to be executed once the windowController has loaded the document's window.
 }
 
+
 - (BOOL)readFromURL:(NSURL *)absoluteURL ofType:(NSString *)typeName error:(NSError **)outError
 {
 	EGODatabase *db = [EGODatabase databaseWithPath:[absoluteURL path]];
@@ -132,23 +83,36 @@
 		break;
 	}
 	
+	result = [db executeQuery:@"select id from team", nil];
+	for(EGODatabaseRow *row in result) {
+		ASITeam *team = [[[ASITeam alloc] initWithMap:[self map]] autorelease];
+		[[map teams] addObject:team];
+		break;
+	}
+	
+	// We'll hard code all objects into the same team for this example
+	ASITeam *team = [[map teams] objectAtIndex:0];
 	
 	result = [db executeQuery:@"select * from mapobject", nil];
 	
 	for (EGODatabaseRow *row in result) {
-		MapObject *mapObject;
+		ASIMapObject *mapObject;
 		if ([[row stringForColumn:@"type"] isEqualToString:@"building"]) {
 			mapObject = [[[ASIImmovableObject alloc] initWithMap:[self map]] autorelease];
 		} else {
-			mapObject = [[[ASIMoveableObject alloc] initWithMap:[self map]] autorelease];
-			[(ASIMoveableObject *)mapObject setDestination:Position3DFromString([row stringForColumn:@"destination"])];
+			mapObject = [[[ASIUnit alloc] initWithMap:[self map]] autorelease];
+			[(ASIUnit *)mapObject setDestination:Position3DFromString([row stringForColumn:@"destination"])];
+			[team addUnit:(ASIUnit *)mapObject];
 		}
 		[mapObject setPosition:Position3DFromString([row stringForColumn:@"position"])];
 	}
 	[db close];
+
 	return YES;
 }
 
+// Basic, not particularly efficient way of storing map data
+// Hopefully though it's clear from the code what is happening
 - (BOOL)saveToURL:(NSURL *)absoluteURL ofType:(NSString *)typeName forSaveOperation:(NSSaveOperationType)saveOperation error:(NSError **)outError
 {
 	EGODatabase *db = [EGODatabase databaseWithPath:[absoluteURL path]];
@@ -157,23 +121,26 @@
 	}
 	[db beginTransaction];
 	
+	[db executeQuery:@"create table team(id integer)",nil];
 	[db executeQuery:@"create table properties(size text)", nil];
-	[db executeQuery:@"create table mapobject(type text, position text, destination text)", nil];
+	[db executeQuery:@"create table mapobject(type text, position text, destination text, team integer)", nil];
 	
 	[db commit];
 	[db beginTransaction];
 	
 	[db executeQuery:@"delete from properties", nil];
 	[db executeQuery:@"delete from mapobject", nil];
+	[db executeQuery:@"delete from team", nil];
 	
 	[db executeUpdate:@"insert into properties (size) values(?)", StringFromSize3D([map mapSize]), nil];
 	
+	[db executeUpdate:@"insert into team (id) values(1)", nil];
 	
-	for (MapObject *object in [map objects]) {
-		if ([object isKindOfClass:[ASIImmovableObject class]]) {
-			[db executeUpdate:@"insert into mapobject (type,position) values('building',?)", StringFromPosition3D([object position]), nil];
+	for (ASIMapObject *object in [map objects]) {
+		if ([object isKindOfClass:[ASIUnit class]]) {
+			[db executeUpdate:@"insert into mapobject (type,position,destination,team) values('unit',?,?,1)", StringFromPosition3D([object position]), StringFromPosition3D([(ASIUnit *)object destination]), nil];
 		} else {
-			[db executeUpdate:@"insert into mapobject (type,position,destination) values('unit',?,?)", StringFromPosition3D([object position]), StringFromPosition3D([(ASIMoveableObject *)object destination]), nil];
+			[db executeUpdate:@"insert into mapobject (type,position) values('building',?)", StringFromPosition3D([object position]), nil];
 		}
 	}
 	[db commit];
@@ -184,7 +151,9 @@
 
 - (void)setPlanMoves:(id)sender
 {
-	[map setSpaceTimeMap:[[[ASISpaceTimeMap alloc] initWithSize:CGSizeMake(20, 20) timeSpan:[sender intValue]] autorelease]];
+	for (ASITeam *team in [map teams]) {
+		[team setSpaceTimeMap:[[[ASISpaceTimeMap alloc] initWithSize:CGSizeMake(20, 20) timeSpan:[sender intValue]] autorelease]];
+	}
 }
 
 @synthesize map;

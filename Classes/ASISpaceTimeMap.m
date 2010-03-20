@@ -9,11 +9,21 @@
 #import "ASISpaceTimeMap.h"
 #import "ASIPathSearchDataTypes.h"
 
+// Each space time map will start planning at a different time
+// As planning happens on a schedule, this will force each individual space time map to plan at a different frame
+// So, if you have several teams, each can plan on a different frame, helping balance the cpu load
+static unsigned char planStartTime = 0;
+
 @implementation ASISpaceTimeMap
 
 - (id)initWithSize:(CGSize)newSize timeSpan:(unsigned int)newTimeSpan
 {
 	self = [super initWithMapSize:Size3DMake(newSize.width, newSize.height, newTimeSpan)];
+	currentTimeStep = planStartTime;
+	planStartTime++;
+	if (planStartTime == newTimeSpan) {
+		planStartTime = 0;
+	}
 	return self;
 }
 

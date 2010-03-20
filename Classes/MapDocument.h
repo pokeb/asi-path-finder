@@ -21,11 +21,11 @@
 	IBOutlet AssessorView *assessorView;
 	IBOutlet PathFinderView *pathFinderView;
 	IBOutlet SimulationView *simulationView;
+	IBOutlet NSTabView *tabView;
 }
 
-+ (NSArray *)examples;
-+ (NSArray *)failedExamples;
 - (IBAction)setPlanMoves:(id)sender;
+- (void)switchToSimulationView;
 
 @property (retain, nonatomic) ASIWorldMap *map;
 @end

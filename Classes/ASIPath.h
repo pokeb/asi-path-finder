@@ -42,11 +42,15 @@
 // Get the first position in the path
 - (Position3D)firstNode;
 
+// Grab the position at a certain point in the path
+// This is used by the team to find objects that may be in the way of this object
+- (Position3D)nodeAtIndex:(unsigned int )index;
+
 // Remove the first position in the path
 - (void)removeFirstNode;
 
 // The number of positions remaining in the path
-- (int)length;
+- (unsigned int)length;
 
 // Returns a position from a point in the path (primarily useful for debugging)
 - (Position3D)positionAtIndex:(unsigned int)index;

@@ -7,9 +7,9 @@
 //
 
 #import "ASIWorldMap.h"
-#import "MapObject.h"
+#import "ASIMapObject.h"
 #import "ASISpaceTimeMap.h"
-#import "ASIMoveableObject.h"
+#import "ASIUnit.h"
 
 @implementation ASIWorldMap
 
@@ -22,17 +22,17 @@
 {
 	self = [super initWithMapSize:newSize];
 	[self setObjects:[NSMutableArray array]];
-	[self setSpaceTimeMap:[[[ASISpaceTimeMap alloc] initWithSize:CGSizeMake(20, 20) timeSpan:20] autorelease]];
+	[self setTeams:[NSMutableArray array]];
 	return self;
 }
 
-- (void)addObject:(MapObject *)object
+- (void)addObject:(ASIMapObject *)object
 {
 	[objects addObject:object];
 	[super setObject:object atPosition:[object position]];
 }
 
-- (void)removeObject:(MapObject *)object
+- (void)removeObject:(ASIMapObject *)object
 {
 	[super removeObject:object atPosition:[object position]];
 	[objects removeObject:object];
@@ -40,17 +40,17 @@
 
 - (void)removeObjectAtPosition:(Position3D)position
 {
-	MapObject *object = [self objectAtPosition:position];
+	ASIMapObject *object = [self objectAtPosition:position];
 	if (object) {
 		[self removeObject:object];
 	}
 }
 
-- (NSArray *)moveableObjects
+- (NSArray *)units
 {
 	NSMutableArray *units = [NSMutableArray array];
-	for (MapObject *object in objects) {
-		if ([object isKindOfClass:[ASIMoveableObject class]]) {
+	for (ASIMapObject *object in objects) {
+		if ([object isKindOfClass:[ASIUnit class]]) {
 			[units addObject:object];
 		}
 	}
@@ -59,5 +59,5 @@
 
 
 @synthesize objects;
-@synthesize spaceTimeMap;
+@synthesize teams;
 @end

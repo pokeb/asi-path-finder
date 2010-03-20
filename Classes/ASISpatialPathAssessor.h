@@ -13,9 +13,9 @@
 #import "ASIPathSearchDataTypes.h"
 
 @class ASIWorldMap;
-@class MapObject;
+@class ASIMapObject;
 @class ASIPath;
-@class ASIMoveableObject;
+@class ASIUnit;
 @class ASISearchNodeList;
 
 @interface ASISpatialPathAssessor : NSObject {
@@ -37,7 +37,7 @@
 	ASISearchNodeList *nodeList;
 	
 	// The object that wants to assess a path - we use this to ensure an object will ignore itself when looking for free positions
-	ASIMoveableObject *object;
+	ASIUnit *object;
 	
 	// Set to YES when we fail to find a route between two positions
 	BOOL failedToFindRoute;
@@ -74,7 +74,7 @@
 @property (assign, nonatomic) Position3D origin;
 @property (assign, nonatomic) Position3D destination;
 @property (assign, nonatomic) ASIWorldMap *map;
-@property (assign, nonatomic) ASIMoveableObject *object;
+@property (assign, nonatomic) ASIUnit *object;
 @property (assign, nonatomic) BOOL failedToFindRoute;
 @property (assign, nonatomic) BOOL haveFinishedAssessingPath;
 @property (retain, nonatomic) ASISearchNodeList *nodeList;

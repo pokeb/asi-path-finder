@@ -7,10 +7,11 @@
 //
 
 #import "EditView.h"
-#import "MapObject.h"
+#import "ASIMapObject.h"
 #import "ASIWorldMap.h"
 #import "ASIImmovableObject.h"
-#import "ASIMoveableObject.h"
+#import "ASIUnit.h"
+#import "ASITeam.h"
 
 static NSDictionary *textAttributes = nil;
 
@@ -76,20 +77,21 @@ static NSDictionary *textAttributes = nil;
 
 - (void)paintBuildingAtPosition:(Position3D)position
 {
-	MapObject *building = [[[ASIImmovableObject alloc] initWithMap:map] autorelease];
+	ASIMapObject *building = [[[ASIImmovableObject alloc] initWithMap:map] autorelease];
 	[building setPosition:position];
 	[self paintObject:building atPosition:position];
 }
 
 - (void)paintUnitAtPosition:(Position3D)position
 {
-	ASIMoveableObject *unit = [[[ASIMoveableObject alloc] initWithMap:map] autorelease];
+	ASIUnit *unit = [[[ASIUnit alloc] initWithMap:map] autorelease];
 	[unit setPosition:position];
 	[unit setDestination:position];
+	[[[map teams] objectAtIndex:0] addUnit:unit];
 	[self paintObject:unit atPosition:position];
 }
 
-- (void)paintObject:(MapObject *)object atPosition:(Position3D)position
+- (void)paintObject:(ASIMapObject *)object atPosition:(Position3D)position
 {
 	if (position.x >= 0 && position.x < [map mapSize].xSize && position.y >= 0 && position.y < [map mapSize].ySize) {
 		
@@ -131,7 +133,7 @@ static NSDictionary *textAttributes = nil;
 	for (y=1; y<[map mapSize].ySize; y++) {
 		[NSBezierPath strokeLineFromPoint:NSMakePoint(0,y*23) toPoint:NSMakePoint([self bounds].size.width,y*23)];
 	}
-	for (MapObject *object in [map objects]) {
+	for (ASIMapObject *object in [map objects]) {
 		Position3D position = [object position];
 		drawRect = NSMakeRect(position.x*23, position.y*23, 23, 23);
 		if ([object isKindOfClass:[ASIImmovableObject class]]) {
@@ -144,7 +146,7 @@ static NSDictionary *textAttributes = nil;
 			[path fill];
 			
 			[[NSColor blackColor] setFill];
-			[[NSString stringWithFormat:@"%i",[(ASIMoveableObject *)object tag]] drawAtPoint:NSMakePoint(drawRect.origin.x+3, drawRect.origin.y+3) withAttributes:textAttributes];
+			[[NSString stringWithFormat:@"%i",[(ASIUnit *)object tag]] drawAtPoint:NSMakePoint(drawRect.origin.x+3, drawRect.origin.y+3) withAttributes:textAttributes];
 
 			
 		}

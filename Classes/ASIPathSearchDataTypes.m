@@ -7,7 +7,7 @@
 //
 
 #import "ASIPathSearchDataTypes.h"
-#import "MapObject.h"
+#import "ASIMapObject.h"
 
 static Node **nodeList = NULL;
 static unsigned int allocatedNodeCount = 0;
@@ -102,8 +102,8 @@ inline Size3D Size3DFromString(NSString *string)
 
 inline NSInteger sortByDistance(id obj1, id obj2, void *fromPos)
 {
-	float distance1 = DistanceBetweenPositions([(MapObject *)obj1 position], [(MapObject *)fromPos position]);
-	float distance2 = DistanceBetweenPositions([(MapObject *)obj2 position], [(MapObject *)fromPos position]);
+	float distance1 = DistanceBetweenPositions([(ASIMapObject *)obj1 position], [(ASIMapObject *)fromPos position]);
+	float distance2 = DistanceBetweenPositions([(ASIMapObject *)obj2 position], [(ASIMapObject *)fromPos position]);
 	if (distance1 < distance2) {
 		return NSOrderedAscending;
 	} else if (distance1 > distance2) {

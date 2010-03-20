@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="100048"/>
+			<integer value="100021"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -60,7 +60,7 @@
 								<object class="NSTabViewItem" id="804940498">
 									<string key="NSIdentifier">1</string>
 									<object class="NSView" key="NSView" id="119573500">
-										<nil key="NSNextResponder"/>
+										<reference key="NSNextResponder" ref="59040656"/>
 										<int key="NSvFlags">256</int>
 										<object class="NSMutableArray" key="NSSubviews">
 											<bool key="EncodedWithXMLCoder">YES</bool>
@@ -109,6 +109,7 @@
 											</object>
 										</object>
 										<string key="NSFrame">{{10, 33}, {480, 509}}</string>
+										<reference key="NSSuperview" ref="59040656"/>
 									</object>
 									<string key="NSLabel">Paint</string>
 									<reference key="NSColor" ref="507321855"/>
@@ -174,7 +175,7 @@
 								<object class="NSTabViewItem" id="945619002">
 									<string key="NSIdentifier">3</string>
 									<object class="NSView" key="NSView" id="920389436">
-										<reference key="NSNextResponder" ref="59040656"/>
+										<nil key="NSNextResponder"/>
 										<int key="NSvFlags">256</int>
 										<object class="NSMutableArray" key="NSSubviews">
 											<bool key="EncodedWithXMLCoder">YES</bool>
@@ -194,7 +195,7 @@
 												<object class="NSTextFieldCell" key="NSCell" id="218034339">
 													<int key="NSCellFlags">67239424</int>
 													<int key="NSCellFlags2">138412032</int>
-													<string key="NSContents">Click a unit with a path defined, then use the arrows to step through the path</string>
+													<string key="NSContents">Click a unit, then on a point on the map to the the partial path it has computed</string>
 													<reference key="NSSupport" ref="110731804"/>
 													<reference key="NSControlView" ref="950592667"/>
 													<reference key="NSBackgroundColor" ref="507321855"/>
@@ -260,7 +261,6 @@
 											</object>
 										</object>
 										<string key="NSFrame">{{10, 33}, {480, 509}}</string>
-										<reference key="NSSuperview" ref="59040656"/>
 									</object>
 									<string key="NSLabel">Path Finder</string>
 									<reference key="NSColor" ref="507321855"/>
@@ -422,14 +422,14 @@
 									<reference key="NSTabView" ref="59040656"/>
 								</object>
 							</object>
-							<reference key="NSSelectedTabViewItem" ref="945619002"/>
+							<reference key="NSSelectedTabViewItem" ref="804940498"/>
 							<reference key="NSFont" ref="36226453"/>
 							<int key="NSTvFlags">0</int>
 							<bool key="NSAllowTruncatedLabels">YES</bool>
 							<bool key="NSDrawsBackground">YES</bool>
 							<object class="NSMutableArray" key="NSSubviews">
 								<bool key="EncodedWithXMLCoder">YES</bool>
-								<reference ref="920389436"/>
+								<reference ref="119573500"/>
 							</object>
 						</object>
 					</object>
@@ -441,7 +441,7 @@
 				<string key="NSMaxSize">{1.79769e+308, 1.79769e+308}</string>
 			</object>
 			<object class="NSCustomObject" id="796877042">
-				<string key="NSClassName">NSApplication</string>
+				<string key="NSClassName">ASIPathFinderApplication</string>
 			</object>
 		</object>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
@@ -598,6 +598,14 @@
 						<reference key="destination" ref="4889764"/>
 					</object>
 					<int key="connectionID">100125</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">tabView</string>
+						<reference key="source" ref="512844837"/>
+						<reference key="destination" ref="59040656"/>
+					</object>
+					<int key="connectionID">100126</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -1089,11 +1097,19 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">100125</int>
+			<int key="maxID">100126</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
 				<bool key="EncodedWithXMLCoder">YES</bool>
+				<object class="IBPartialClassDescription">
+					<string key="className">ASIPathFinderApplication</string>
+					<string key="superclassName">NSApplication</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">Classes/ASIPathFinderApplication.h</string>
+					</object>
+				</object>
 				<object class="IBPartialClassDescription">
 					<string key="className">AssessorView</string>
 					<string key="superclassName">EditView</string>
@@ -1129,6 +1145,7 @@
 							<string>editView</string>
 							<string>pathFinderView</string>
 							<string>simulationView</string>
+							<string>tabView</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1136,6 +1153,7 @@
 							<string>EditView</string>
 							<string>PathFinderView</string>
 							<string>SimulationView</string>
+							<string>NSTabView</string>
 						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
@@ -1160,7 +1178,7 @@
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">PathFinderView.h</string>
+						<string key="minorKey">Classes/PathFinderView.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
@@ -1202,7 +1220,7 @@
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
-						<string key="minorKey">SimulationView.h</string>
+						<string key="minorKey">Classes/SimulationView.h</string>
 					</object>
 				</object>
 			</object>

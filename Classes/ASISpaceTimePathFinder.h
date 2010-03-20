@@ -12,14 +12,14 @@
 #import "ASIPathSearchDataTypes.h"
 
 @class MapDocument;
-@class ASIMoveableObject;
+@class ASIUnit;
 @class ASIPath;
 @class ASISpatialPathAssessor;
 
 @interface ASISpaceTimePathFinder : NSObject {
 	
 	// The object performing the path finding
-	ASIMoveableObject *object;
+	ASIUnit *object;
 	
 	// When set to YES, the path finder will ask the object if we're near enough to the target to stop each time it finds a valid position
 	// This might be used when telling objects to attack another object - they only need to get within range of it to attack
@@ -31,12 +31,12 @@
 }
 
 // Create a path finder
-- (id)initWithObject:(ASIMoveableObject *)newObject;
+- (id)initWithObject:(ASIUnit *)newObject;
 
 // Perform path finding, and return a path that the object can use until they perform path finding again
 - (ASIPath *)findPath;
 
-@property (assign, nonatomic) ASIMoveableObject *object;
+@property (assign, nonatomic) ASIUnit *object;
 @property (assign, nonatomic) BOOL stopWhenWithinRangeOfTarget;
 @property (assign, nonatomic) BOOL attemptToStayInSameLocation;
 @end

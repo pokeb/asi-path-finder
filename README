@@ -1,6 +1,6 @@
 ASIPathFinder is a cooperative path finder that may be most useful for Real-Time Strategy Games.
 
-Portions are based on the Path Finder I wrote for Space Harvest (http://spaceharvest.com) though I have not yet extracted all the features I want to include. Consider this code alpha quality, use at your own risk! :)
+Portions are based on the Path Finder I wrote for Space Harvest (http://spaceharvest.com).
 
 There are no docs yet. I hope to provide full documentation, cleanup the example code, fix bugs, and hopefully provide a more real-world example project soon.
 

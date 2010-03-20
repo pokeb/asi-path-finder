@@ -1,19 +1,19 @@
 //
-//  ASIMoveableObject.m
+//  ASIUnit.m
 //  Part of ASIPathFinder --> http://allseeing-i.com/ASIPathFinder
 //
 //  Created by Ben Copsey on 27/02/2010.
 //  Copyright 2010 All-Seeing Interactive. All rights reserved.
 //
 
-#import "ASIMoveableObject.h"
+#import "ASIUnit.h"
 #import "ASISpatialPathAssessor.h"
 #import "ASISpaceTimePathFinder.h"
 #import "ASIPath.h"
 
 static unsigned short nextTag = 0;
 
-@implementation ASIMoveableObject
+@implementation ASIUnit
 
 - (id)initWithMap:(ASIWorldMap *)newMap
 {
@@ -87,6 +87,7 @@ static unsigned short nextTag = 0;
 	[pathFinder setAttemptToStayInSameLocation:didFailToFindARouteToTarget];
 	
 	[pathFinder findPath];
+	havePerformedPathFinding = YES;
 }
 
 - (void)setDestination:(Position3D)newDestination
@@ -95,23 +96,17 @@ static unsigned short nextTag = 0;
 	[self setPathAssessment:nil];
 }
 
-
-- (BOOL)willMoveForUnit:(ASIMoveableObject *)unit
-{
-	return YES;
-}
-
 - (unsigned char)speed
 {
 	return 1;
 }
 
-- (BOOL)isObjectWithinLineOfFire:(MapObject *)object
+- (BOOL)isObjectWithinLineOfFire:(ASIMapObject *)object
 {
 	return [self isObjectWithinLineOfFire:object ifWeWereAt:[self position]];
 }
 
-- (BOOL)isObjectWithinLineOfFire:(MapObject *)object ifWeWereAt:(Position3D)newPosition
+- (BOOL)isObjectWithinLineOfFire:(ASIMapObject *)object ifWeWereAt:(Position3D)newPosition
 {
 	if (DistanceBetweenPositions(position, newPosition) < 5) {
 		return YES;
@@ -129,17 +124,17 @@ static unsigned short nextTag = 0;
 	BOOL canMove = NO;
 	isAskingToMove = YES;
 	Position3D newPosition = [[self path] firstNode];
-	MapObject *objectInTheWay = [[self map] objectAtPosition:newPosition];
+	ASIMapObject *objectInTheWay = [[self map] objectAtPosition:newPosition];
 	if (!objectInTheWay) {
 		canMove = YES;
-	} else if (![objectInTheWay isKindOfClass:[ASIMoveableObject class]]) {
+	} else if (![objectInTheWay isKindOfClass:[ASIUnit class]]) {
 		canMove = NO;
-	} else if ([(ASIMoveableObject *)objectInTheWay isAskingToMove]) {
+	} else if ([(ASIUnit *)objectInTheWay isAskingToMove]) {
 		canMove = YES;
-	} else if ([(ASIMoveableObject *)objectInTheWay haveMoved] || ![[(ASIMoveableObject *)objectInTheWay path] length] || EqualPositions([[(ASIMoveableObject *)objectInTheWay path] firstNode], newPosition)) {
+	} else if ([(ASIUnit *)objectInTheWay haveMoved] || ![[(ASIUnit *)objectInTheWay path] length] || EqualPositions([[(ASIUnit *)objectInTheWay path] firstNode], newPosition)) {
 		canMove = NO;
 	} else {
-		canMove = [(ASIMoveableObject *)objectInTheWay canMove];
+		canMove = [(ASIUnit *)objectInTheWay canMove];
 	}
 	isAskingToMove = NO;
 	return canMove;
@@ -154,12 +149,6 @@ static unsigned short nextTag = 0;
 		} else {
 			
 			Position3D newPosition = [[self path] firstNode];
-//			if (!EqualPositions(position, newPosition)) {
-//				if (EqualPositions(position, destination)) {
-//					movingOutTheWay = 5;
-//				}
-//			}
-//			
 			[self setPosition:newPosition];
 			[[self path] removeFirstNode];
 		}
@@ -168,17 +157,18 @@ static unsigned short nextTag = 0;
 }
 
 // This object won't nescessarily be in this position forever, so we'll allow other objects to pass through it
-- (BOOL)isPassableByObject:(MapObject *)mapObject movingNow:(BOOL)aboutToMove atPosition:(Position3D *)myPosition fromPosition:(Position3D *)theirPosition withCost:(float *)cost andDistance:(float *)distance
+- (BOOL)isPassableByObject:(ASIMapObject *)mapObject movingNow:(BOOL)aboutToMove atPosition:(Position3D *)myPosition fromPosition:(Position3D *)theirPosition withCost:(float *)cost andDistance:(float *)distance
 {
 	return YES;
 }
 
+@synthesize team;
 @synthesize destination;
 @synthesize pathAssessment;
 @synthesize target;
 @synthesize path;
-@synthesize tag;
 @synthesize havePerformedPathFinding;
 @synthesize isAskingToMove;
 @synthesize haveMoved;
+@synthesize tag;
 @end
