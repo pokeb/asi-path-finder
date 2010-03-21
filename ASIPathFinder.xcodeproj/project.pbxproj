@@ -23,7 +23,6 @@
 		B55DBFFE113D41DF0054C3C1 /* SimulationView.m in Sources */ = {isa = PBXBuildFile; fileRef = B55DBFFA113D41DF0054C3C1 /* SimulationView.m */; };
 		B55DBFFF113D41DF0054C3C1 /* PathFinderView.m in Sources */ = {isa = PBXBuildFile; fileRef = B55DBFFC113D41DF0054C3C1 /* PathFinderView.m */; };
 		B5C033D01139907300F6B805 /* ASIObjectMap.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C033BA1139907300F6B805 /* ASIObjectMap.m */; };
-		B5C033D11139907300F6B805 /* ASIImmovableObject.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C033BC1139907300F6B805 /* ASIImmovableObject.m */; };
 		B5C033D21139907300F6B805 /* EditView.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C033BE1139907300F6B805 /* EditView.m */; };
 		B5C033D31139907300F6B805 /* EGODatabase.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C033C11139907300F6B805 /* EGODatabase.m */; };
 		B5C033D41139907300F6B805 /* EGODatabaseResult.m in Sources */ = {isa = PBXBuildFile; fileRef = B5C033C31139907300F6B805 /* EGODatabaseResult.m */; };
@@ -56,8 +55,8 @@
 		B51080151155035C00CB0D03 /* ASITeam.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASITeam.m; sourceTree = "<group>"; };
 		B51080A0115509D100CB0D03 /* ExampleFailures */ = {isa = PBXFileReference; lastKnownFileType = folder; path = ExampleFailures; sourceTree = "<group>"; };
 		B510826D115527A900CB0D03 /* Examples */ = {isa = PBXFileReference; lastKnownFileType = folder; path = Examples; sourceTree = "<group>"; };
-		B510827F1155283B00CB0D03 /* ASIPathFinderApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIPathFinderApplication.h; sourceTree = "<group>"; };
-		B51082801155283B00CB0D03 /* ASIPathFinderApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIPathFinderApplication.m; sourceTree = "<group>"; };
+		B510827F1155283B00CB0D03 /* ASIPathFinderApplication.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = ASIPathFinderApplication.h; path = Classes/ASIPathFinderApplication.h; sourceTree = "<group>"; };
+		B51082801155283B00CB0D03 /* ASIPathFinderApplication.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ASIPathFinderApplication.m; path = Classes/ASIPathFinderApplication.m; sourceTree = "<group>"; };
 		B52D4E21113A90F000AA68CD /* ASISpaceTimePathFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASISpaceTimePathFinder.h; sourceTree = "<group>"; };
 		B52D4E22113A90F000AA68CD /* ASISpaceTimePathFinder.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASISpaceTimePathFinder.m; sourceTree = "<group>"; };
 		B52D4EA7113A99CB00AA68CD /* ASISpaceTimeMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASISpaceTimeMap.h; sourceTree = "<group>"; };
@@ -70,8 +69,6 @@
 		B55DBFFD113D41DF0054C3C1 /* PathFinderView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PathFinderView.h; path = Classes/PathFinderView.h; sourceTree = "<group>"; };
 		B5C033B91139907300F6B805 /* ASIObjectMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIObjectMap.h; sourceTree = "<group>"; };
 		B5C033BA1139907300F6B805 /* ASIObjectMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIObjectMap.m; sourceTree = "<group>"; };
-		B5C033BB1139907300F6B805 /* ASIImmovableObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIImmovableObject.h; sourceTree = "<group>"; };
-		B5C033BC1139907300F6B805 /* ASIImmovableObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIImmovableObject.m; sourceTree = "<group>"; };
 		B5C033BD1139907300F6B805 /* EditView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = EditView.h; path = Classes/EditView.h; sourceTree = "<group>"; };
 		B5C033BE1139907300F6B805 /* EditView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = EditView.m; path = Classes/EditView.m; sourceTree = "<group>"; };
 		B5C033C01139907300F6B805 /* EGODatabase.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = EGODatabase.h; sourceTree = "<group>"; };
@@ -82,8 +79,8 @@
 		B5C033C51139907300F6B805 /* EGODatabaseRow.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = EGODatabaseRow.m; sourceTree = "<group>"; };
 		B5C033C81139907300F6B805 /* ASIMapObject.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIMapObject.h; sourceTree = "<group>"; };
 		B5C033C91139907300F6B805 /* ASIMapObject.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIMapObject.m; sourceTree = "<group>"; };
-		B5C033CA1139907300F6B805 /* MapDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MapDocument.h; sourceTree = "<group>"; };
-		B5C033CB1139907300F6B805 /* MapDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MapDocument.m; sourceTree = "<group>"; };
+		B5C033CA1139907300F6B805 /* MapDocument.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MapDocument.h; path = Classes/MapDocument.h; sourceTree = "<group>"; };
+		B5C033CB1139907300F6B805 /* MapDocument.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MapDocument.m; path = Classes/MapDocument.m; sourceTree = "<group>"; };
 		B5C033CE1139907300F6B805 /* ASIUnit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ASIUnit.h; sourceTree = "<group>"; };
 		B5C033CF1139907300F6B805 /* ASIUnit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ASIUnit.m; sourceTree = "<group>"; };
 		B5C033EC1139914400F6B805 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
@@ -141,7 +138,7 @@
 		2A37F4AAFDCFA73011CA2CEA /* ASIPathFinder */ = {
 			isa = PBXGroup;
 			children = (
-				B52D4E2F113A90F500AA68CD /* Mac Demo UI */,
+				B52D4E2F113A90F500AA68CD /* Mac Sample App */,
 				B5C033B81139907300F6B805 /* Classes */,
 				2A37F4AFFDCFA73011CA2CEA /* Other Sources */,
 				2A37F4B8FDCFA73011CA2CEA /* Resources */,
@@ -155,6 +152,7 @@
 		2A37F4AFFDCFA73011CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				B5C033BF1139907300F6B805 /* EGODatabase */,
 				2564AD2C0F5327BB00F57823 /* ASIPathFinder_Prefix.pch */,
 				2A37F4B0FDCFA73011CA2CEA /* main.m */,
 			);
@@ -184,9 +182,13 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
-		B52D4E2F113A90F500AA68CD /* Mac Demo UI */ = {
+		B52D4E2F113A90F500AA68CD /* Mac Sample App */ = {
 			isa = PBXGroup;
 			children = (
+				B5C033CA1139907300F6B805 /* MapDocument.h */,
+				B5C033CB1139907300F6B805 /* MapDocument.m */,
+				B510827F1155283B00CB0D03 /* ASIPathFinderApplication.h */,
+				B51082801155283B00CB0D03 /* ASIPathFinderApplication.m */,
 				B5C033BD1139907300F6B805 /* EditView.h */,
 				B5C033BE1139907300F6B805 /* EditView.m */,
 				B5C034E4113997AF00F6B805 /* AssessorView.h */,
@@ -196,7 +198,7 @@
 				B55DBFFD113D41DF0054C3C1 /* PathFinderView.h */,
 				B55DBFFC113D41DF0054C3C1 /* PathFinderView.m */,
 			);
-			name = "Mac Demo UI";
+			name = "Mac Sample App";
 			sourceTree = "<group>";
 		};
 		B5C033B81139907300F6B805 /* Classes */ = {
@@ -220,13 +222,6 @@
 				B5C0347D1139958000F6B805 /* ASISearchNodeList.m */,
 				B5C034791139953A00F6B805 /* ASIPath.h */,
 				B5C0347A1139953A00F6B805 /* ASIPath.m */,
-				B5C033BF1139907300F6B805 /* EGODatabase */,
-				B5C033CA1139907300F6B805 /* MapDocument.h */,
-				B5C033CB1139907300F6B805 /* MapDocument.m */,
-				B510827F1155283B00CB0D03 /* ASIPathFinderApplication.h */,
-				B51082801155283B00CB0D03 /* ASIPathFinderApplication.m */,
-				B5C033BB1139907300F6B805 /* ASIImmovableObject.h */,
-				B5C033BC1139907300F6B805 /* ASIImmovableObject.m */,
 				B5C033C81139907300F6B805 /* ASIMapObject.h */,
 				B5C033C91139907300F6B805 /* ASIMapObject.m */,
 				B5C033CE1139907300F6B805 /* ASIUnit.h */,
@@ -245,7 +240,8 @@
 				B5C033C41139907300F6B805 /* EGODatabaseRow.h */,
 				B5C033C51139907300F6B805 /* EGODatabaseRow.m */,
 			);
-			path = EGODatabase;
+			name = EGODatabase;
+			path = Classes/EGODatabase;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -309,7 +305,6 @@
 			files = (
 				8D15AC320486D014006FF6A4 /* main.m in Sources */,
 				B5C033D01139907300F6B805 /* ASIObjectMap.m in Sources */,
-				B5C033D11139907300F6B805 /* ASIImmovableObject.m in Sources */,
 				B5C033D21139907300F6B805 /* EditView.m in Sources */,
 				B5C033D31139907300F6B805 /* EGODatabase.m in Sources */,
 				B5C033D41139907300F6B805 /* EGODatabaseResult.m in Sources */,

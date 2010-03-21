@@ -28,7 +28,7 @@
 
 - (BOOL)allowsCornerCutting
 {
-	return YES;
+	return NO;
 }
 
 - (void)setPosition:(Position3D)newPosition

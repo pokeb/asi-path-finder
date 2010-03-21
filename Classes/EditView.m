@@ -9,7 +9,6 @@
 #import "EditView.h"
 #import "ASIMapObject.h"
 #import "ASIWorldMap.h"
-#import "ASIImmovableObject.h"
 #import "ASIUnit.h"
 #import "ASITeam.h"
 
@@ -77,7 +76,7 @@ static NSDictionary *textAttributes = nil;
 
 - (void)paintBuildingAtPosition:(Position3D)position
 {
-	ASIMapObject *building = [[[ASIImmovableObject alloc] initWithMap:map] autorelease];
+	ASIMapObject *building = [[[ASIMapObject alloc] initWithMap:map] autorelease];
 	[building setPosition:position];
 	[self paintObject:building atPosition:position];
 }
@@ -136,10 +135,7 @@ static NSDictionary *textAttributes = nil;
 	for (ASIMapObject *object in [map objects]) {
 		Position3D position = [object position];
 		drawRect = NSMakeRect(position.x*23, position.y*23, 23, 23);
-		if ([object isKindOfClass:[ASIImmovableObject class]]) {
-			[[NSColor blackColor] setFill];
-			[NSBezierPath fillRect:drawRect];
-		} else {
+		if ([object isKindOfClass:[ASIUnit class]]) {
 			[[NSColor greenColor] setFill];
 			NSBezierPath *path = [NSBezierPath bezierPath];
 			[path appendBezierPathWithOvalInRect:drawRect];
@@ -147,8 +143,10 @@ static NSDictionary *textAttributes = nil;
 			
 			[[NSColor blackColor] setFill];
 			[[NSString stringWithFormat:@"%i",[(ASIUnit *)object tag]] drawAtPoint:NSMakePoint(drawRect.origin.x+3, drawRect.origin.y+3) withAttributes:textAttributes];
-
+		} else {
 			
+			[[NSColor blackColor] setFill];
+			[NSBezierPath fillRect:drawRect];
 		}
 		
 	}

@@ -25,6 +25,12 @@ static unsigned short nextTag = 0;
 	return self;
 }
 
+- (BOOL)allowsCornerCutting
+{
+	return YES;
+}
+
+
 - (void)performPathFinding
 {
 	// If we haven't done path finding before, create a path assessor
@@ -84,7 +90,7 @@ static unsigned short nextTag = 0;
 	if (movingToAttackTarget) {
 		[pathFinder setStopWhenWithinRangeOfTarget:5];
 	}
-	[pathFinder setAttemptToStayInSameLocation:didFailToFindARouteToTarget];
+	[pathFinder setAttemptToStayInSameLocation:(didFailToFindARouteToTarget || ![pathAssessment haveFinishedAssessingPath])];
 	
 	[pathFinder findPath];
 	havePerformedPathFinding = YES;

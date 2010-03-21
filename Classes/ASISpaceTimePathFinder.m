@@ -338,6 +338,9 @@ static unsigned char searchDirections[8] = {PathDirectionNorthEast,PathDirection
 								break;
 							}
 						}
+						if (!shouldStop) {
+							break;
+						}
 					}
 					if (shouldStop) {
 						nearestNodeSoFar = n;

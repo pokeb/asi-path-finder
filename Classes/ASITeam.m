@@ -44,6 +44,11 @@
 		originalPlanUnit = planUnit;
 		
 		firstUnit = [units objectAtIndex:planUnit];
+		
+		// This makes stuck units move quicker, at the expense of some correctness
+		// Basically, if there are *any* objects that want to move, one of these will take priority over any objects that want to stay still
+		// So, we first check to see if a unit wants to move
+		// If not, we ask the next unit, until we either find one that does, or we run out of units
 		while (EqualPositions([firstUnit position], [firstUnit destination])) {
 			planUnit++;
 			if (planUnit > totalUnits-1) {
@@ -55,14 +60,13 @@
 			}
 		}
 		
-		NSArray *sortedUnits = [units sortedArrayUsingFunction:sortByDistance context:firstUnit];
 		[self setPlanOrder:[NSMutableArray array]];
 		[self tellUnitToPlan:firstUnit];
 		
-		for (ASIUnit *unit in sortedUnits) {
+		// Now get any units that haven't planned a path to plan
+		for (ASIUnit *unit in units) {
 			if (![unit havePerformedPathFinding]) {
-				[planOrder addObject:unit];
-				[unit performPathFinding];
+				[self tellUnitToPlan:unit];
 			}
 		}
 		

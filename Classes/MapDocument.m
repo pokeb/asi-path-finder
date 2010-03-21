@@ -10,7 +10,6 @@
 #import "EGODatabase.h"
 #import "ASIMapObject.h"
 #import "ASIWorldMap.h"
-#import "ASIImmovableObject.h"
 #import "ASIUnit.h"
 #import "SimulationView.h"
 #import "ASISpaceTimeMap.h"
@@ -98,7 +97,7 @@
 	for (EGODatabaseRow *row in result) {
 		ASIMapObject *mapObject;
 		if ([[row stringForColumn:@"type"] isEqualToString:@"building"]) {
-			mapObject = [[[ASIImmovableObject alloc] initWithMap:[self map]] autorelease];
+			mapObject = [[[ASIMapObject alloc] initWithMap:[self map]] autorelease];
 		} else {
 			mapObject = [[[ASIUnit alloc] initWithMap:[self map]] autorelease];
 			[(ASIUnit *)mapObject setDestination:Position3DFromString([row stringForColumn:@"destination"])];

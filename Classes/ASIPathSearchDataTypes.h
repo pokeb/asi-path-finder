@@ -78,10 +78,10 @@ void freeNodes();
 // This is normally used as the default Position where a position has not yet been set
 extern Position3D InvalidPosition;
 
-// Create a position
+// Create a three-dimensional position
 Position3D Position3DMake(int x, int y, int z);
 
-// Create a position
+// Create a three-dimensional size
 Size3D Size3DMake(int xSize, int ySize, int zSize);
 
 // Determine if two positions are equal to each other
@@ -102,8 +102,7 @@ NSString *StringFromSize3D(Size3D size);
 // Turn a string into a position
 Size3D Size3DFromString(NSString *string);
 
-
+// Used for sorting an array of objects by distance from the passed object
 extern NSInteger sortByDistance(id obj1, id obj2, void *fromPos);
-extern NSInteger sortByStrategicValue(id obj1, id obj2, void *fromPos);
 
 
